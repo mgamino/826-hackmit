@@ -175,17 +175,60 @@ class CyoaHandler(webapp2.RequestHandler):
             card.put()
 
         one_one_one = self.request.get("one_one_one")
+		if one_one_one == "":
+            one_one_one = card.one_one_one
+        else:
+            card.one_one_one = one_one_one;
+            card.put()
 
         one_one_two = self.request.get("one_one_two")
+		if one_one_two == "":
+            one_one_two = card.one_one_two
+        else:
+            card.one_one_two = one_one_two;
+            card.put()
 
         one_two = self.request.get("one_two")
+		if one_two == "":
+            one_two = card.one_two
+        else:
+            card.one_two = one_two;
+            card.put()
+
         one_two_one = self.request.get("one_two_one")
+		if one_two_one == "":
+            one_two_one = card.one_two_one
+        else:
+            card.one_two_one = one_two_one;
+            card.put()
 
         one_two_two = self.request.get("one_two_two")
+		if one_two_two == "":
+            one_two_two = card.one_two_two
+        else:
+            card.one_two_two = one_two_two;
+            card.put()
 
         two = self.request.get("two")
+		if two == "":
+			two = card.two
+		else:
+			card.two = two;
+			card.put()
+
         two_one = self.request.get("two_one")
+		if two_one == "":
+			two_one = card.two_one
+		else:
+			card.two_one = two_one;
+			card.put()
+
         two_two = self.request.get("two_two")
+		if two_two == "":
+			two_two = card.two_two
+		else:
+			card.two_two = two_two;
+			card.put()
 
 
 
