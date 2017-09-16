@@ -18,6 +18,7 @@ class Story (ndb.Model):
 	prompt = ndb.TextProperty()
 	visualTheme = ndb.StringProperty()
 	structure = ndb.StringProperty()
+	views = ndb.IntegerProperty()
 	published = ndb.BooleanProperty()
 
 class StoryCard(ndb.Model):
@@ -86,7 +87,7 @@ class WriteHandler(webapp2.RequestHandler):
 		visualTheme = self.request.get('visualTheme')
 		structure = self.request.get('structure')
 
-		story = Story(text = text, profile_email = profile_email, prompt = prompt, visualTheme = visualTheme, structure = structure, published = False)
+		story = Story(text = text, profile_email = profile_email, prompt = prompt, visualTheme = visualTheme, structure = structure, views = 0, published = False)
 		story.put()
 		if structure == "freewrite":
 			self.redirect('/freewrite')
