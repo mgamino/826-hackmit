@@ -87,7 +87,6 @@ app = webapp2.WSGIApplication([
     ('/readfreewrite',ReadFreewriteHandler),
     ('/write',WriteHandler),
 	('/freewrite',FreewriteHandler),
-	('/editfreewrite',EditFreewriteHandler),
 	('/cyoa', CyoaHandler),
     ('/submit', SubmitHandler),
 ], debug=True)
