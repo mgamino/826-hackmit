@@ -12,7 +12,7 @@ class Profile (ndb.Model):
 
 class Story (ndb.Model):
 	title = ndb.StringProperty()
-	profile_key = ndb.KeyProperty(kind = Profile)
+	profile_email = ndb.StringProperty()
 	publicationDate = ndb.DateTimeProperty()
 	writtenDate = ndb.DateTimeProperty(auto_now_add=True)
 	prompt = ndb.TextProperty()
@@ -24,6 +24,10 @@ class StoryCard(ndb.Model):
     text = ndb.TextProperty()
     story_key = ndb.KeyProperty(kind = Story)
     cardNumber = ndb.StringProperty()
+
+class Submission(ndb.Model):
+	text = ndb.TextProperty()
+	profile_email = ndb.StringProperty()
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_environment = jinja2.Environment(
@@ -90,6 +94,20 @@ class SubmitHandler(webapp2.RequestHandler):
 		template = jinja_environment.get_template("submit.html")
 		self.response.write(template.render())
 
+	def post(self):
+		text = self.request.get('text')
+		profile = users.get_current_user()
+		profile_email = profile.email().lower()
+
+		submission = Submission(text = text, profile_email = profile_email)
+		submission.put()
+		self.redirect("/submitted")
+
+class SubmittedHandler(webapp2.RequestHandler):
+	def get(self):
+		template = jinja_environment.get_template("submitted.html")
+		self.response.write(template.render())
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/profile', ProfileHandler),
@@ -101,4 +119,5 @@ app = webapp2.WSGIApplication([
 	('/freewrite',FreewriteHandler),
 	('/cyoa', CyoaHandler),
     ('/submit', SubmitHandler),
+	('/submitted',SubmittedHandler)
 ], debug=True)
