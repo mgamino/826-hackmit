@@ -30,13 +30,8 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-<<<<<<< HEAD
-        template = jinja_environment.get_template("home.html")
-        self.response.write(template.render())
-=======
     	template = jinja_environment.get_template("main.html")
 		self.response.write(template.render())
->>>>>>> bea6402e1002b315d6f7456e21334bc04fd49c32
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
