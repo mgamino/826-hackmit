@@ -30,16 +30,23 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
+<<<<<<< HEAD
         template = jinja_environment.get_template("home.html")
         self.response.write(template.render())
+=======
+    	template = jinja_environment.get_template("main.html")
+		self.response.write(template.render())
+>>>>>>> bea6402e1002b315d6f7456e21334bc04fd49c32
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Profile Page')
+        template = jinja_environment.get_template("profile.html")
+		self.response.write(template.render())
 
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Read page')
+        template = jinja_environment.get_template("read.html")
+		self.response.write(template.render())
 
 class ReadStoryHandler(webapp2.RequestHandler):
     template = jinja_environment.get_template("readstory.html")
@@ -47,7 +54,8 @@ class ReadStoryHandler(webapp2.RequestHandler):
 
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Write Page')
+        template = jinja_environment.get_template("write.html")
+		self.response.write(template.render())
 
 class FreewriteHandler(webapp2.RequestHandler):
     def get(self):
@@ -66,7 +74,8 @@ class CyoaHandler(webapp2.RequestHandler):
 
 class SubmitHandler(webapp2.RequestHandler):
 	def get(self):
-		self.response.write('Submit page')
+		template = jinja_environment.get_template("submit.html")
+		self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
