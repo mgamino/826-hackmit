@@ -38,14 +38,25 @@ class ProfileHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("profile.html")
 		self.response.write(template.render())
 
+class SetProfileHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("setprofile.html")
+		self.response.write(template.render())
+
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("read.html")
 		self.response.write(template.render())
 
-class ReadStoryHandler(webapp2.RequestHandler):
-    template = jinja_environment.get_template("readstory.html")
-    self.response.write(template.render())
+class ReadCyoaHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("readcyoa.html")
+        self.response.write(template.render())
+
+class ReadFreewriteHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("readfreewrite.html")
+        self.response.write(template.render())
 
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
@@ -55,11 +66,6 @@ class WriteHandler(webapp2.RequestHandler):
 class FreewriteHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("freewrite.html")
-        self.response.write(template.render())
-
-class EditFreewriteHandler(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_environment.get_template("editfreewrite.html")
         self.response.write(template.render())
 
 class CyoaHandler(webapp2.RequestHandler):
@@ -75,8 +81,10 @@ class SubmitHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/profile', ProfileHandler),
+    ('/setprofile', SetProfileHandler),
     ('/read', ReadHandler),
-	('/readstory',ReadStoryHandler),
+	('/readcyoa',ReadCyoaHandler),
+    ('/readfreewrite',ReadFreewriteHandler),
     ('/write',WriteHandler),
 	('/freewrite',FreewriteHandler),
 	('/editfreewrite',EditFreewriteHandler),
