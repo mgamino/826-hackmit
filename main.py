@@ -5,17 +5,16 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import logging
 
-#TODO: finish figuring out the profile bullshit lmao
-
 
 class Profile (ndb.Model):
     name = ndb.StringProperty()
     bio = ndb.TextProperty()
     accountCreated = ndb.DateTimeProperty(auto_now_add=True)
+    email = ndb.StringProperty()
 
 class Story (ndb.Model):
 	title = ndb.StringProperty()
-	profile_email = ndb.StringProperty()
+	profile_key = ndb.KeyProperty(kind = Profile)
 	publicationDate = ndb.DateTimeProperty()
 	writtenDate = ndb.DateTimeProperty(auto_now_add=True)
 	prompt = ndb.TextProperty()
@@ -23,6 +22,7 @@ class Story (ndb.Model):
 	structure = ndb.StringProperty()
 	views = ndb.IntegerProperty()
 	published = ndb.BooleanProperty()
+    submitted = ndb.BooleanProperty()
 
 class StoryCard(ndb.Model):
     text = ndb.TextProperty()
@@ -44,9 +44,14 @@ class MainHandler(webapp2.RequestHandler):
             email = user.email().lower()
             logout_url=users.CreateLogoutURL('/')
 
-            #TODO: if profile w/ matching email does not exist, create profile object with name, bio, and others set as some boring defaults (think uber driver profiles)
+            user = Profile.query(profile.email == email).fetch()
+            if (len(user)) <1):
+                profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
+                profile.put()
 
-            template_vals = {'email':email, 'logout_url':logout_url}
+            profile = Profile.query(profile.email == email).fetch()
+
+            template_vals = {'profile':profile, 'logout_url':logout_url}
             template = jinja_environment.get_template("main.html")
             self.response.write(template.render(template_vals))
         else:
@@ -57,23 +62,40 @@ class MainHandler(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        user_email = user.email()
-        #TODO: query for profile key with this email
+        email = user.email()
+
+        urlsafe_key = self.request.get('key')
+        key = ndb.Key(urlsafe = urlsafe_key)
+
+        profile = Profile.query()
         logout_url=users.CreateLogoutURL('/')
 
-        #TODO: query stories for user key (email?) is this one!
-        #TODO: actually do that twice, once for published and one not published
-        #TODO: jk make it 3, one for published, one for finished not published (awaiting approval), and one for in progress (so u can get the story key from URL)
+        publishedStories = Story.query(Story.profile_key == profile.key, Story.published == True)
+        inProgressStories = Story.query(Story.profile_key == profile.key, Story.published==False, Story.submitted == True).fetch()
+        draftStories = Story.query(Story.profile_key==profile.key, Story.submitted==False).fetch()
 
+        template_vals = {'profile':profile, 'logout_url':logout_url, 'publishedStories':publishedStories, 'inProgressStories':inProgressStories, 'draftStories':draftStories}
 
         template = jinja_environment.get_template("profile.html")
-        template_vals = {'logout_url':logout_url}
+        template_vals = {'publishedStories':publishedStories, 'inProgressStories': inProgressStories, 'draftStories':draftStories, 'logout_url':logout_url}
         self.response.write(template.render(template_vals))
 
 class SetProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("setprofile.html")
         self.response.write(template.render())
+
+    def post(self):
+        name = self.request.get('name')
+        bio = self.request.get('bio')
+        user = users.get_current_user()
+        email = user.email().lower()
+
+        profile = Profile(name = name, bio = bio, email = email)
+
+        profile.put()
+
+        self.redirect('/profile')
 
     #TODO: def post(self) with fields
 
@@ -106,7 +128,7 @@ class WriteHandler(webapp2.RequestHandler):
 		visualTheme = self.request.get('visualTheme')
 		structure = self.request.get('structure')
 
-		story = Story(text = text, profile_email = profile_email, prompt = prompt, visualTheme = visualTheme, structure = structure, views = 0, published = False)
+		story = Story(text = text, profile_email = profile_email, prompt = prompt, visualTheme = visualTheme, structure = structure, views = 0, published = False, approved = False)
 		story.put()
 		if structure == "freewrite":
 			self.redirect('/freewrite')
@@ -134,8 +156,24 @@ class CyoaHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("cyoa.html")
         self.response.write(template.render())
     def post(self):
+        urlsafekey = self.request.get('key')
+        key = ndb.Key(urlsafe = urlsafekey)
+        card = key.get()
+
         one = self.request.get("one")
+        if one == "":
+            one = card.one
+        else:
+            card.one = one;
+            card.put()
+
         one_one = self.request.get("one_one")
+        if one_one == "":
+            one_one = card.one_one
+        else:
+            card.one_one = one_one;
+            card.put()
+
         one_one_one = self.request.get("one_one_one")
 
         one_one_two = self.request.get("one_one_two")
@@ -148,6 +186,21 @@ class CyoaHandler(webapp2.RequestHandler):
         two = self.request.get("two")
         two_one = self.request.get("two_one")
         two_two = self.request.get("two_two")
+
+
+
+
+        if college == "":
+            college = student.college
+        else:
+            student.college = college;
+            student.put()
+        if team == "":
+            team = student.team
+        else:
+            student.team = team;
+            student.put()
+
 
         #TODO(megan): card.put!! for all of these also get story keY>??
 
