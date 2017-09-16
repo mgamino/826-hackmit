@@ -1,6 +1,7 @@
 import webapp2
 import jinja2
 import os
+from google.appengine.api import users
 from google.appengine.ext import ndb
 import logging
 
@@ -30,8 +31,19 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-    	template = jinja_environment.get_template("main.html")
-		self.response.write(template.render())
+        user = users.get_current_user()
+
+        if user:
+            email = user.email().lower()
+            logout_url=users.CreateLogoutURL('/')
+
+            template_vals = {'email':email, 'logout_url':logout_url}
+        	template = jinja_environment.get_template("main.html")
+    		self.response.write(template.render())
+        else:
+            login_url = users.CreateLoginURL('/')
+            template = jinja_environment.get_template("login.html")
+            self.response.write(template.render())
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
