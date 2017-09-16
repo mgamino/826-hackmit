@@ -11,13 +11,18 @@ class Profile (ndb.Model):
 
 class Story (ndb.Model):
 	title = ndb.StringProperty()
-	# author = fuck
-	# publicationDate = fuck
+	profile_key = ndb.KeyProperty(kind = Profile)
+	publicationDate = ndb.DateTimeProperty()
 	writtenDate = ndb.DateTimeProperty(auto_now_add=True)
 	prompt = ndb.TextProperty()
 	visualTheme = ndb.StringProperty()
 	structure = ndb.StringProperty()
 	published = ndb.BooleanProperty()
+
+class StoryCard(ndb.Model):
+    text = ndb.TextProperty()
+    story_key = ndb.KeyProperty(kind = Story)
+    cardNumber = ndb.StringProperty()
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_environment = jinja2.Environment(
