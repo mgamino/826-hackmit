@@ -4,6 +4,21 @@ import os
 from google.appengine.ext import ndb
 import logging
 
+class Profile (ndb.Model):
+    name = ndb.StringProperty()
+    bio = ndb.TextProperty()
+    accountCreated = ndb.DateTimeProperty(auto_now_add=True)
+
+class Story (ndb.Model):
+	title = ndb.StringProperty()
+	# author = fuck
+	# publicationDate = fuck
+	writtenDate = ndb.DateTimeProperty(auto_now_add=True)
+	prompt = ndb.TextProperty()
+	visualTheme = ndb.StringProperty()
+	structure = ndb.StringProperty()
+	published = ndb.BooleanProperty()
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Main page')
