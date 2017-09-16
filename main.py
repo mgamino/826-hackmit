@@ -88,6 +88,8 @@ class SetProfileHandler(webapp2.RequestHandler):
     def post(self):
         name = self.request.get('name')
         bio = self.request.get('bio')
+
+
         user = users.get_current_user()
         email = user.email().lower()
 
@@ -152,7 +154,8 @@ class FreewriteHandler(webapp2.RequestHandler):
 
 class CyoaHandler(webapp2.RequestHandler):
     def get(self):
-        #TODO: template_vals for user + story_key
+        key = self.request.get('key')
+        key =
         template = jinja_environment.get_template("cyoa.html")
         self.response.write(template.render())
     def post(self):
@@ -230,24 +233,6 @@ class CyoaHandler(webapp2.RequestHandler):
 			card.two_two = two_two;
 			card.put()
 
-
-
-
-        if college == "":
-            college = student.college
-        else:
-            student.college = college;
-            student.put()
-        if team == "":
-            team = student.team
-        else:
-            student.team = team;
-            student.put()
-
-
-        #TODO(megan): card.put!! for all of these also get story keY>??
-
-
 class SubmitHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("submit.html")
@@ -266,6 +251,25 @@ class SubmittedHandler(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template("submitted.html")
 		self.response.write(template.render())
+
+class ApprovalFormHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("approvalform.html")
+        urlsafe_key = self.request.get('key')
+        key = ndb.Key(urlsafe = urlsafe_key)
+
+        story = key.get()
+
+        template_vals = {'story':story}
+
+        self.response.write(template.render(template_vals))
+    def post(self):
+        urlsafe_key = self.request.get('key')
+        key = ndb.Key(urlsafe = urlsafe_key)
+        approval = request.get('approval')
+        story = key.get()
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
