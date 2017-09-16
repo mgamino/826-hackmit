@@ -30,7 +30,8 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Main page')
+        template = jinja_environment.get_template("home.html")
+        self.response.write(template.render())
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
@@ -40,9 +41,28 @@ class ReadHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Read page')
 
+class ReadStoryHandler(webapp2.RequestHandler):
+    template = jinja_environment.get_template("readstory.html")
+    self.response.write(template.render())
+
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Write Page')
+
+class FreewriteHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("freewrite.html")
+        self.response.write(template.render())
+
+class EditFreewriteHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("editfreewrite.html")
+        self.response.write(template.render())
+
+class CyoaHandler(webapp2.RequestHandler):
+    def get(self):
+        template = jinja_environment.get_template("cyoa.html")
+        self.response.write(template.render())
 
 class SubmitHandler(webapp2.RequestHandler):
 	def get(self):
