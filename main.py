@@ -30,23 +30,28 @@ jinja_environment = jinja2.Environment(
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Main page')
+    	template = jinja_environment.get_template("main.html")
+		self.response.write(template.render())
 
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Profile Page')
+        template = jinja_environment.get_template("profile.html")
+		self.response.write(template.render())
 
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Read page')
+        template = jinja_environment.get_template("read.html")
+		self.response.write(template.render())
 
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Write Page')
+        template = jinja_environment.get_template("write.html")
+		self.response.write(template.render())
 
 class SubmitHandler(webapp2.RequestHandler):
 	def get(self):
-		self.response.write('Submit page')
+		template = jinja_environment.get_template("submit.html")
+		self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
