@@ -4,6 +4,9 @@ import os
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import logging
+import smtplib
+
+
 
 
 class Profile (ndb.Model):
@@ -86,8 +89,24 @@ class SetProfileHandler(webapp2.RequestHandler):
         self.response.write(template.render())
 
     def post(self):
+		urlsafekey = self.request.get('key')
+        key = ndb.Key(urlsafe = urlsafekey)
+        profile = key.get()
+
         name = self.request.get('name')
+		if name == "":
+			name = profile.name
+		else:
+			profile.name = name;
+			profile.put()
+
         bio = self.request.get('bio')
+		if bio == "":
+			bio = profile.bio
+		else:
+			profile.bio = bio;
+			profile.put()
+
         user = users.get_current_user()
         email = user.email().lower()
 
