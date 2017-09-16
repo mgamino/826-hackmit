@@ -6,9 +6,9 @@ from google.appengine.ext import ndb
 import logging
 
 class Profile (ndb.Model):
-    name = ndb.StringProperty()
-    bio = ndb.TextProperty()
-    accountCreated = ndb.DateTimeProperty(auto_now_add=True)
+    name = ndb.StringProperty()
+    bio = ndb.TextProperty()
+    accountCreated = ndb.DateTimeProperty(auto_now_add=True)
 
 class Story (ndb.Model):
 	title = ndb.StringProperty()
@@ -26,8 +26,7 @@ class StoryCard(ndb.Model):
     cardNumber = ndb.StringProperty()
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_environment = jinja2.Environment(
-  loader=jinja2.FileSystemLoader(template_dir))
+jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -38,8 +37,8 @@ class MainHandler(webapp2.RequestHandler):
             logout_url=users.CreateLogoutURL('/')
 
             template_vals = {'email':email, 'logout_url':logout_url}
-        	template = jinja_environment.get_template("main.html")
-    		self.response.write(template.render())
+            template = jinja_environment.get_template("main.html")
+            self.response.write(template.render(template_vals))
         else:
             login_url = users.CreateLoginURL('/')
             template = jinja_environment.get_template("login.html")
@@ -48,17 +47,17 @@ class MainHandler(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("profile.html")
-		self.response.write(template.render())
+        self.response.write(template.render())
 
 class SetProfileHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("setprofile.html")
-		self.response.write(template.render())
+        self.response.write(template.render())
 
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("read.html")
-		self.response.write(template.render())
+        self.response.write(template.render())
 
 class ReadCyoaHandler(webapp2.RequestHandler):
     def get(self):
@@ -73,7 +72,7 @@ class ReadFreewriteHandler(webapp2.RequestHandler):
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
         template = jinja_environment.get_template("write.html")
-		self.response.write(template.render())
+        self.response.write(template.render())
 
 class FreewriteHandler(webapp2.RequestHandler):
     def get(self):
@@ -86,19 +85,19 @@ class CyoaHandler(webapp2.RequestHandler):
         self.response.write(template.render())
 
 class SubmitHandler(webapp2.RequestHandler):
-	def get(self):
-		template = jinja_environment.get_template("submit.html")
-		self.response.write(template.render())
+    def get(self):
+        template = jinja_environment.get_template("submit.html")
+        self.response.write(template.render())
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/profile', ProfileHandler),
     ('/setprofile', SetProfileHandler),
     ('/read', ReadHandler),
-	('/readcyoa',ReadCyoaHandler),
+    ('/readcyoa',ReadCyoaHandler),
     ('/readfreewrite',ReadFreewriteHandler),
     ('/write',WriteHandler),
-	('/freewrite',FreewriteHandler),
-	('/cyoa', CyoaHandler),
+    ('/freewrite',FreewriteHandler),
+    ('/cyoa', CyoaHandler),
     ('/submit', SubmitHandler),
 ], debug=True)
