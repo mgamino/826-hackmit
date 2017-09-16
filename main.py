@@ -21,6 +21,7 @@ class Story (ndb.Model):
 	prompt = ndb.TextProperty()
 	visualTheme = ndb.StringProperty()
 	structure = ndb.StringProperty()
+	views = ndb.IntegerProperty()
 	published = ndb.BooleanProperty()
 
 class StoryCard(ndb.Model):
@@ -97,12 +98,35 @@ class WriteHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("write.html")
         self.response.write(template.render())
 
+	def post(self):
+		title = self.request.get('title')
+		profile = users.get_current_user()
+		profile_email = profile.email.lower()
+		prompt = self.request.get('prompt')
+		visualTheme = self.request.get('visualTheme')
+		structure = self.request.get('structure')
+
+		story = Story(text = text, profile_email = profile_email, prompt = prompt, visualTheme = visualTheme, structure = structure, views = 0, published = False)
+		story.put()
+		if structure == "freewrite":
+			self.redirect('/freewrite')
+		else:
+			self.redirect('/cyoa')
+
 class FreewriteHandler(webapp2.RequestHandler):
     def get(self):
         #TODO: something about loading the story key?? from url maybe??
         template = jinja_environment.get_template("freewrite.html")
         self.response.write(template.render())
     #TODO: def post(self): save the card & story
+
+	def post(self):
+		text = self.request.get('text')
+		story_key = "shit"
+
+		storycard = StoryCard(text = text, story_key = story_key, cardNumber = "1")
+		storycard.put()
+		self.redirect("/profile")
 
 class CyoaHandler(webapp2.RequestHandler):
     def get(self):
