@@ -6,9 +6,6 @@ from google.appengine.ext import ndb
 import logging
 import smtplib
 
-
-
-
 #TODO: AGE OH Y GOD
 
 #These are the ndb Models
@@ -101,7 +98,6 @@ class SetProfileHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vals))
 
     def post(self):
-<<<<<<< HEAD
         urlsafe_key = self.request.get('key')
         key = ndb.Key(urlsafe = urlsafe_key)
         profile = key.get()
@@ -111,28 +107,6 @@ class SetProfileHandler(webapp2.RequestHandler):
             name = profile.name
         else:
             profile.name = name
-=======
-		urlsafekey = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafekey)
-        profile = key.get()
-
-        name = self.request.get('name')
-		if name == "":
-			name = profile.name
-		else:
-			profile.name = name;
-			profile.put()
-
-        bio = self.request.get('bio')
-<<<<<<< HEAD
-		if bio == "":
-			bio = profile.bio
-		else:
-			profile.bio = bio;
-			profile.put()
-=======
-
->>>>>>> 2e2589474e685559a9bdbba6672ca18f6f9e1870
 >>>>>>> f0a2c2abb6ed245ec6c2a8a8b961f7189be41c39
 
         bio = self.request.get('bio')
@@ -379,7 +353,7 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
         template_vals = {'story':story}
         self.response.write(template.render(template_vals))
 
-#ya pls update all of this 
+#ya pls update all of this
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/profile', ProfileHandler),
