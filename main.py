@@ -55,7 +55,7 @@ class MainHandler(webapp2.RequestHandler):
             if (len(profile) <1):
                 profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
                 profile.put()
-                self.redirect("/")
+                self.redirect("/main.html")
 
             template_vals = {'profile':profile, 'logout_url':logout_url}
             template = jinja_environment.get_template("main.html")
@@ -64,7 +64,7 @@ class MainHandler(webapp2.RequestHandler):
             login_url = users.CreateLoginURL('/')
             template = jinja_environment.get_template("login.html")
             template_vals = {'login_url':login_url}
-            self.response.write(template.render())
+            self.response.write(template.render(template_vals))
 
 #profile complete!
 class ProfileHandler(webapp2.RequestHandler):
@@ -159,16 +159,13 @@ class ReadFreewriteHandler(webapp2.RequestHandler):
 #TODO: once you have the HTML, merge freewrite and cyoa into this, using if-else statements based on the form name
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
-        story = key.get()
 
         user = users.get_current_user()
         email = user.email()
         profile = Profile.query(Profile.email == email).fetch()
 
-        template = jinja_environment.get_template("readcyoa.html")
-        template_vals = {'story':story, 'profile':profile}
+        template = jinja_environment.get_template("write.html")
+        template_vals = {'profile':profile}
         self.response.write(template.render(template_vals))
 
     def post(self):
@@ -350,6 +347,8 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
 #ya pls update all of this
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
+    ('/main.html', MainHandler),
+    ('/index.html',MainHandler)
     ('/profile.html', ProfileHandler),
     ('/make-profile', SetProfileHandler),
     ('/read.html', ReadHandler),
