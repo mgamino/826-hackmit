@@ -107,7 +107,6 @@ class SetProfileHandler(webapp2.RequestHandler):
             name = profile.name
         else:
             profile.name = name
->>>>>>> f0a2c2abb6ed245ec6c2a8a8b961f7189be41c39
 
         bio = self.request.get('bio')
         if bio == "":
