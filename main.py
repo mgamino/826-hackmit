@@ -101,22 +101,11 @@ class SetProfileHandler(webapp2.RequestHandler):
 			profile.put()
 
         bio = self.request.get('bio')
-<<<<<<< HEAD
 		if bio == "":
 			bio = profile.bio
 		else:
 			profile.bio = bio;
 			profile.put()
-=======
-
->>>>>>> 2e2589474e685559a9bdbba6672ca18f6f9e1870
-
-        user = users.get_current_user()
-        email = user.email().lower()
-
-        profile = Profile(name = name, bio = bio, email = email)
-
-        profile.put()
 
         self.redirect('/profile')
 
