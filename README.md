@@ -13,8 +13,11 @@ visualTheme StringProperty theme associated with prompt,
 structure StringProperty structure used for story creation,
 views IntegerProperty number of views on story,
 published BooleanProperty true if story has been published,
-approved BooleanProperty true if story has been approved for publishing 
+approved BooleanProperty true if story has been approved for publishing
 
-STORYCARD class text TextProperty content of storycard, story_key KeyProperty story for which card is written, cardNumber StringProperty number of storycard
+CARD class text:
+TextProperty content of card,
+story_key KeyProperty story for which card is written,
+cardNumber StringProperty number of storycard
 
 SUBMISSION class text TextProperty content of prompt submission, profile_email StringProperty email of user submitting prompt
