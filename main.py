@@ -74,12 +74,12 @@ class ProfileHandler(webapp2.RequestHandler):
 
         logout_url=users.CreateLogoutURL('/')
 
-        publishedStories = Story.query(Story.profile_key == profile.key, Story.published == True)
-        inProgressStories = Story.query(Story.profile_key == profile.key, Story.published==False, Story.submitted == True).fetch()
-        draftStories = Story.query(Story.profile_key==profile.key, Story.submitted==False).fetch()
+        # publishedStories = Story.query(Story.profile_key == profile.key, Story.published == True)
+        # inProgressStories = Story.query(Story.profile_key == profile.key, Story.published==False, Story.submitted == True).fetch()
+        # draftStories = Story.query(Story.profile_key==profile.key, Story.submitted==False).fetch()
 
         template = jinja_environment.get_template("profile.html")
-        template_vals = {'profile':profile, 'logout_url':logout_url, 'publishedStories':publishedStories, 'inProgressStories':inProgressStories, 'draftStories':draftStories}
+        template_vals = {'profile':profile, 'logout_url':logout_url} #'publishedStories':publishedStories, 'inProgressStories':inProgressStories, 'draftStories':draftStories}
 
         self.response.write(template.render(template_vals))
 
@@ -107,11 +107,6 @@ class SetProfileHandler(webapp2.RequestHandler):
             name = profile.name
         else:
             profile.name = name
-<<<<<<< HEAD
-
-=======
->>>>>>> 58c27c26af54c0a61d58f077a58ad8ff498b5248
-
         bio = self.request.get('bio')
         if bio == "":
             bio = profile.bio
@@ -352,7 +347,7 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/main.html', MainHandler),
-    ('/index.html',MainHandler)
+    ('/index.html',MainHandler),
     ('/profile.html', ProfileHandler),
     ('/make-profile', SetProfileHandler),
     ('/read.html', ReadHandler),
