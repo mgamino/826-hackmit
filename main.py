@@ -63,6 +63,7 @@ class MainHandler(webapp2.RequestHandler):
         else:
             login_url = users.CreateLoginURL('/')
             template = jinja_environment.get_template("login.html")
+            template_vals = {'login_url':login_url}
             self.response.write(template.render())
 
 #profile complete!
@@ -92,7 +93,7 @@ class SetProfileHandler(webapp2.RequestHandler):
 
         logout_url=users.CreateLogoutURL('/')
 
-        template = jinja_environment.get_template("profile.html")
+        template = jinja_environment.get_template("make-profile.html")
         template_vals = {'profile':profile, 'logout_url':logout_url}
 
         self.response.write(template.render(template_vals))
@@ -351,7 +352,7 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/profile', ProfileHandler),
-    ('/setprofile', SetProfileHandler),
+    ('/make-profile', SetProfileHandler),
     ('/read', ReadHandler),
 #    ('/readcyoa',ReadCyoaHandler),
 #    ('/readfreewrite',ReadFreewriteHandler),
