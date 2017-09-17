@@ -52,7 +52,7 @@ class MainHandler(webapp2.RequestHandler):
             logout_url=users.CreateLogoutURL('/')
 
             profile = Profile.query(Profile.email == email).fetch()
-            if (len(user) <1):
+            if (len(profile) <1):
                 profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
                 profile.put()
                 self.redirect("/")
@@ -69,9 +69,8 @@ class MainHandler(webapp2.RequestHandler):
 #profile complete!
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
-        profile = key.get()
+        user = users.get_current_user()
+        profile = Profile.query(Profile.email == user.email()).fetch()
 
         logout_url=users.CreateLogoutURL('/')
 
@@ -351,12 +350,12 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
 #ya pls update all of this
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/profile', ProfileHandler),
+    ('/profile.html', ProfileHandler),
     ('/make-profile', SetProfileHandler),
-    ('/read', ReadHandler),
+    ('/read.html', ReadHandler),
 #    ('/readcyoa',ReadCyoaHandler),
 #    ('/readfreewrite',ReadFreewriteHandler),
-    ('/write',WriteHandler),
+    ('/write.html',WriteHandler),
 #    ('/submit', SubmitHandler),
 	('/submitted',SubmittedHandler),
     ('/approvalform', ApprovalFormHandler),
