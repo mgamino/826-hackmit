@@ -17,15 +17,15 @@ class Profile (ndb.Model):
     age = ndb.IntegerProperty()
 
 class Story (ndb.Model):
-	title = ndb.StringProperty()
-	profile_key = ndb.KeyProperty(kind = Profile)
-	publicationDate = ndb.DateTimeProperty()
-	writtenDate = ndb.DateTimeProperty(auto_now_add=True)
-	prompt = ndb.TextProperty()
-	visualTheme = ndb.StringProperty()
-	structure = ndb.StringProperty()
-	views = ndb.IntegerProperty()
-	published = ndb.BooleanProperty()
+    title = ndb.StringProperty()
+    profile_key = ndb.KeyProperty(kind = Profile)
+    publicationDate = ndb.DateTimeProperty()
+    writtenDate = ndb.DateTimeProperty(auto_now_add=True)
+    prompt = ndb.TextProperty()
+    visualTheme = ndb.StringProperty()
+    structure = ndb.StringProperty()
+    views = ndb.IntegerProperty()
+    published = ndb.BooleanProperty()
     approval = ndb.BooleanProperty()
 
 class Card(ndb.Model):
@@ -37,8 +37,8 @@ class Card(ndb.Model):
 # 	text = ndb.TextProperty()
 # 	profile_email = ndb.StringProperty()
 #
-# template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-# jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
+template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
 
 #These are the handlers for the HTML templates
 
@@ -52,7 +52,7 @@ class MainHandler(webapp2.RequestHandler):
             logout_url=users.CreateLogoutURL('/')
 
             profile = Profile.query(Profile.email == email).fetch()
-            if (len(user)) <1):
+            if (len(user) <1):
                 profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
                 profile.put()
                 self.redirect("/")
@@ -126,7 +126,7 @@ class SetProfileHandler(webapp2.RequestHandler):
 #read page comlpete!
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
-        stories = Story.query(Story.published = True).fetch()
+        stories = Story.query(Story.published == True).fetch()
 
         template = jinja_environment.get_template("read.html")
         template_vals = {'stories':stories}
@@ -158,7 +158,6 @@ class ReadFreewriteHandler(webapp2.RequestHandler):
 
 #TODO: once you have the HTML, merge freewrite and cyoa into this, using if-else statements based on the form name
 class WriteHandler(webapp2.RequestHandler):
-
     def get(self):
         urlsafe_key = self.request.get('key')
         key = ndb.Key(urlsafe = urlsafe_key)
@@ -172,25 +171,22 @@ class WriteHandler(webapp2.RequestHandler):
         template_vals = {'story':story, 'profile':profile}
         self.response.write(template.render(template_vals))
 
-	def post(self):
+    def post(self):
         urlsafe_key = self.request.get('key')
         key = ndb.Key(urlsafe = urlsafe_key)
-		story = key.get()
+        story = key.get()
 
         user = users.get_current_user()
         email = user.email()
         profile = Profile.query(Profile.email == email).fetch()
 
         title = self.request.get('title')
-		theme = self.request.get('theme')
-		structure = self.request.get('structure')
+        theme = self.request.get('theme')
+        structure = self.request.get('structure')
 
-		story = Story(title = title, profile_key = profile, theme = theme, structure = structure, views = 0, published = False, approval = False)
-		story.put()
-		if structure == "freewrite":
-			self.redirect('/freewrite')
-		else:
-			self.redirect('/cyoa')
+        story = Story(title = title, profile_key = profile, theme = theme, structure = structure, views = 0, published = False, approval = False)
+        story.put()
+        self.redirect('/profile')
 
 # class FreewriteHandler(webapp2.RequestHandler):
 #     def get(self):
@@ -338,12 +334,11 @@ class ApprovalFormHandler(webapp2.RequestHandler):
             story.approval = True
         story.put()
 
-    self.redirect('/approvalconfirm')
+        self.redirect('/approvalconfirm')
 
 #approval confirmation page!
 class ApprovalConfirmHandler(webapp2.RequestHandler):
     def get(self):
-
         urlsafe_key = self.request.get('key')
         key = ndb.Key(urlsafe = urlsafe_key)
         story = key.get()
@@ -361,10 +356,8 @@ app = webapp2.WSGIApplication([
 #    ('/readcyoa',ReadCyoaHandler),
 #    ('/readfreewrite',ReadFreewriteHandler),
     ('/write',WriteHandler),
-    ('/freewrite',FreewriteHandler),
-    ('/cyoa', CyoaHandler),
 #    ('/submit', SubmitHandler),
 	('/submitted',SubmittedHandler),
     ('/approvalform', ApprovalFormHandler),
-    ('approvalconfirm'. ApprovalConfirmHandler),
+    ('/approvalconfirm', ApprovalConfirmHandler),
 ], debug=True)
