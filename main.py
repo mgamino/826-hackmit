@@ -53,7 +53,7 @@ class MainHandler(webapp2.RequestHandler):
 
             profile = profiles[0]
 
-            if (len(profile) <1):
+            if (len(profiles) <1):
                 profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
                 profile.put()
                 self.redirect("/main.html")
@@ -82,10 +82,10 @@ class ProfileHandler(webapp2.RequestHandler):
 
         # publishedStories = Story.query(Story.profile_key == profile.key, Story.published == True)
         # inProgressStories = Story.query(Story.profile_key == profile.key, Story.published==False, Story.submitted == True).fetch()
-        # draftStories = Story.query(Story.profile_key==profile.key, Story.submitted==False).fetch()
+        draftStories = Story.query(Story.profile_key==profile.key, Story.published==False).fetch()
 
         template = jinja_environment.get_template("profile.html")
-        template_vals = {'profile':profile, 'logout_url':logout_url} #'publishedStories':publishedStories, 'inProgressStories':inProgressStories, 'draftStories':draftStories}
+        template_vals = {'profile':profile, 'logout_url':logout_url, 'draftStories':draftStories} #'publishedStories':publishedStories, 'inProgressStories':inProgressStories, 'draftStories':draftStories}
 
         self.response.write(template.render(template_vals))
 
@@ -153,14 +153,31 @@ class ReadCyoaHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vals))
 
 #see above!
-class ReadFreewriteHandler(webapp2.RequestHandler):
+class FreeStyleStoryHandler(webapp2.RequestHandler):
     def get(self):
-        template = jinja_environment.get_template("readcyoa.html")
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
+        template = jinja_environment.get_template("freestylestory.html")
+        story_key_urlsafe = self.request.get('key')
+        key = ndb.Key(urlsafe = story_key_urlsafe)
         story = key.get()
 
-        template_vals = {'story':story}
+        cards = Card.query(Card.story_key == story.key).fetch()
+        card = cards[0]
+
+        logging.info("CARD IS")
+        logging.info(card.text)
+
+        user = users.get_current_user()
+        profiles = Profile.query(Profile.email == user.email()).fetch()
+        profile = profiles[0]
+
+        authors = Profile.query(Profile.key == story.profile_key).fetch()
+        logging.info(authors)
+        author = authors[0]
+
+        logging.info("AUTHOR IS: ")
+        logging.info(author)
+
+        template_vals = {'story':story, 'profile':profile, 'author':author, 'card':card}
 
         self.response.write(template.render(template_vals))
 
@@ -185,10 +202,16 @@ class WriteHandler(webapp2.RequestHandler):
 
         title = self.request.get('title')
         theme = self.request.get('theme')
+        text = self.request.get('text')
         structure = "freewrite"
 
         story = Story(title = title, profile_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False)
         story.put()
+
+        card = Card(text = text, story_key = story.key)
+        card.put()
+
+        logging.info("POST COMPLETE")
         self.redirect('/profile.html')
 
 # class CyoaHandler(webapp2.RequestHandler):
@@ -343,7 +366,7 @@ app = webapp2.WSGIApplication([
     ('/read.html', ReadHandler),
     ('/read', ReadHandler),
 #    ('/readcyoa',ReadCyoaHandler),
-#    ('/readfreewrite',ReadFreewriteHandler),
+    ('/freestylestory',FreeStyleStoryHandler),
     ('/write.html',WriteHandler),
 #    ('/submit', SubmitHandler),
 	('/submitted',SubmittedHandler),

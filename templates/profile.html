@@ -114,39 +114,24 @@
               <div class="w-col w-col-3 w-col-medium-6 w-col-small-6"></div>
             </div>
           </div>
+          {% if draftStories %}
           <div class="drafts past_stories">
             <h4 class="section-heading">Drafts:</h4>
             <div class="w-row">
+              {% for draft in draftStories %}
               <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
                 <div class="story">
-                  <div class="sf story_art"></div>
+                  <div class="{{draft.theme}} story_art"></div>
                   <div class="story_info">
-                    <h4 class="story_title">Captain Hook and Peter Pan</h4>
-                    <div class="story_location">San Francisco, CA</div>
+                    <h4 class="story_title"> <a href="/freestylestory?key={{draft.key.urlsafe()}}">{{draft.title}}</a></h4>
                   </div>
                 </div>
               </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
-                <div class="story">
-                  <div class="detroit story_art"></div>
-                  <div class="story_info">
-                    <h4 class="story_title">The Space Captain</h4>
-                    <div class="story_location">Detroit, MI</div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
-                <div class="story">
-                  <div class="boston story_art"></div>
-                  <div class="story_info">
-                    <h4 class="story_title">Bigfoot Loves Spaghetti</h4>
-                    <div class="story_location">Boston, MA</div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6"></div>
+              {% endfor %}
+
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>
