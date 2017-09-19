@@ -54,7 +54,7 @@ class MainHandler(webapp2.RequestHandler):
             profile = profiles[0]
 
             if (len(profiles) <1):
-                profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
+                profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email, age = "ageless")
                 profile.put()
                 self.redirect("/main.html")
 
@@ -134,7 +134,7 @@ class MakeProfileHandler(webapp2.RequestHandler):
 #read page comlpete!
 class ReadHandler(webapp2.RequestHandler):
     def get(self):
-        stories = Story.query(Story.published == True).fetch()
+        stories = Story.query(Story.approval == True).fetch()
 
         template = jinja_environment.get_template("read.html")
         template_vals = {'stories':stories}
@@ -205,7 +205,7 @@ class WriteHandler(webapp2.RequestHandler):
         text = self.request.get('text')
         structure = "freewrite"
 
-        story = Story(title = title, profile_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False)
+        story = Story(title = title, profile_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = True)
         story.put()
 
         card = Card(text = text, story_key = story.key)

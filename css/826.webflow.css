@@ -343,7 +343,7 @@ figcaption {
   box-shadow: 0 2px 7px -1px hsla(0, 0%, 66%, .73);
 }
 
-.story_art {
+.story_art_sf {
   width: 100%;
   height: 100px;
   background-image: url('../images/142054-OTDDLQ-998.jpg');
@@ -351,17 +351,17 @@ figcaption {
   background-size: cover;
 }
 
-.story_art.detroit {
+.story_art_detroit {
   background-image: url('../images/11.jpg');
   background-position: 50% 0px;
 }
 
-.story_art.boston {
+.story_art_boston {
   background-image: url('../images/DD-Forest-Background-60012-Preview.jpg');
 }
 
-.story_art.dc {
-  background-image: url('../images/46653-O4Y0O2.jpg');
+.story_art_dc {
+  background-image: url('../images/DC.jpeg');
   background-position: 50% 0px;
 }
 

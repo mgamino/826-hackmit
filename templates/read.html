@@ -50,42 +50,17 @@
           <div class="search_results">
             <h4 class="section-heading">Search results:</h4>
             <div class="w-row">
+              {% for story in stories %}
               <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
                 <div class="story">
-                  <div class="sf story_art"></div>
+                  <div class="story_art_{{story.theme}}"></div>
                   <div class="story_info">
-                    <h4 class="story_title">Lost at Sea</h4>
-                    <div class="story_location">San Francisco, CA</div>
+                    <h4 class="story_title"><a href = "/freestylestory?key={{story.key.urlsafe()}}">{{story.title}}</a></h4>
+
                   </div>
                 </div>
               </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
-                <div class="story">
-                  <div class="detroit story_art"></div>
-                  <div class="story_info">
-                    <h4 class="story_title">Lost in the Vortex</h4>
-                    <div class="story_location">Detroit, MI</div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
-                <div class="story">
-                  <div class="boston story_art"></div>
-                  <div class="story_info">
-                    <h4 class="story_title">Bigfoot is my Dad</h4>
-                    <div class="story_location">Boston, MA</div>
-                  </div>
-                </div>
-              </div>
-              <div class="w-col w-col-3 w-col-medium-6 w-col-small-6">
-                <div class="story">
-                  <div class="dc story_art"></div>
-                  <div class="story_info">
-                    <h4 class="story_title">Go to Sleep, Dragon</h4>
-                    <div class="story_location">Washington D.C.</div>
-                  </div>
-                </div>
-              </div>
+              {% endfor %}
             </div>
           </div>
         </div>

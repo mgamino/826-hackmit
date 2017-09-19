@@ -39,9 +39,9 @@
           </div>
 
             <form method="post">
-              <label>Name:</label><input class="w-input" maxlength="256" name="name" placeholder="Enter your name" type="text">
-              <label>Age:</label> <input class="w-input" maxlength="3" name="age" placeholder="Enter your age" type="text">
-              <label>Bio:</label><input class="w-input" name="bio" placeholder="Tell us a little about you!" type="text">
+              <label>Name:</label><input class="w-input" maxlength="256" name="name" placeholder="{{profile.name}}" type="text">
+              <label>Age:</label> <input class="w-input" maxlength="3" name="age" placeholder="{{profile.age}}" type="text">
+              <label>Bio:</label><input class="w-input" name="bio" placeholder="{{profile.bio}}" type="text">
               <input class="submit-button-2 w-button" data-wait="Building your profile..." type="submit" value="Done!">
             </form>
             <div class="w-form-done">
