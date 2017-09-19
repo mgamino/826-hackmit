@@ -31,21 +31,26 @@
   </div>
   <div class="section">
     <div class="row w-row">
-      <div class="column w-col w-col-3 w-col-small-small-stack w-col-tiny-tiny-stack"><a class="nav_button w-clearfix w-inline-block" href="index.html"><img class="navicon" src="images/826_home.png"><div class="float_left w-hidden-small w-hidden-tiny">Home</div></a><a class="nav_button w-clearfix w-inline-block" href="read.html"><img class="navicon" src="images/826_read.png"><div class="float_left w-hidden-small w-hidden-tiny">Read</div></a><a class="nav_button w-clearfix w-inline-block" href="write.html"><img class="navicon" src="images/826_write.png"><div class="float_left w-hidden-small w-hidden-tiny">Write</div></a><a class="nav_button w-clearfix w-inline-block" href="profile.html"><img class="navicon" src="images/826_profile.png"><div class="float_left w-hidden-small w-hidden-tiny">Profile</div></a><a class="logout nav_button w-clearfix w-inline-block" href="#"><img class="navicon" src="images/826_logout.png"><div class="float_left w-hidden-small w-hidden-tiny">Logout</div></a></div>
+      <div class="column w-col w-col-3 w-col-small-small-stack w-col-tiny-tiny-stack"><a class="nav_button w-clearfix w-inline-block" href="index.html"><img class="navicon" src="images/826_home.png"><div class="float_left w-hidden-small w-hidden-tiny">Home</div></a><a class="nav_button w-clearfix w-inline-block" href="read.html"><img class="navicon" src="images/826_read.png"><div class="float_left w-hidden-small w-hidden-tiny">Read</div></a><a class="nav_button w-clearfix w-inline-block" href="write.html"><img class="navicon" src="images/826_write.png"><div class="float_left w-hidden-small w-hidden-tiny">Write</div></a><a class="nav_button w-clearfix w-inline-block" href="profile.html"><img class="navicon" src="images/826_profile.png"><div class="float_left w-hidden-small w-hidden-tiny">Profile</div></a><a class="logout nav_button w-clearfix w-inline-block" href="{{logout_url}}"><img class="navicon" src="images/826_logout.png"><div class="float_left w-hidden-small w-hidden-tiny">Logout</div></a></div>
       <div class="column-2 w-col w-col-9 w-col-small-small-stack w-col-tiny-tiny-stack">
         <div class="paper">
           <div class="section-title-group">
             <h2 class="section-heading story_header">Make your profile</h2>
           </div>
-          <div class="w-form">
-            <form data-name="Email Form" id="email-form" name="email-form"><label for="name">Name:</label><input class="w-input" data-name="Name" id="name" maxlength="256" name="name" placeholder="Enter your name" type="text"><label for="email">Age:</label><input class="w-input" data-name="Email" id="email" maxlength="256" name="email" placeholder="Enter your age" required="required" type="text"><label for="Bio">Bio:</label><input class="w-input" data-name="Bio" id="Bio" maxlength="256" name="Bio" placeholder="Tell us a little about you!" required="required" type="text"><input class="submit-button-2 w-button" data-wait="Building your profile..." type="submit" value="Done!"></form>
+
+            <form method="post">
+              <label>Name:</label><input class="w-input" maxlength="256" name="name" placeholder="Enter your name" type="text">
+              <label>Age:</label> <input class="w-input" maxlength="3" name="age" placeholder="Enter your age" type="text">
+              <label>Bio:</label><input class="w-input" name="bio" placeholder="Tell us a little about you!" type="text">
+              <input class="submit-button-2 w-button" data-wait="Building your profile..." type="submit" value="Done!">
+            </form>
             <div class="w-form-done">
-              <div>Thank you! Your submission has been received!</div>
+              <div>Thank you! Your profile has been updated!</div>
             </div>
             <div class="w-form-fail">
               <div>Oops! Something went wrong while submitting the form.</div>
             </div>
-          </div>
+
         </div>
       </div>
     </div>

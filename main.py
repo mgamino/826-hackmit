@@ -14,15 +14,14 @@ class Profile (ndb.Model):
     bio = ndb.TextProperty()
     accountCreated = ndb.DateTimeProperty(auto_now_add=True)
     email = ndb.StringProperty()
-    age = ndb.IntegerProperty()
+    age = ndb.StringProperty()
 
 class Story (ndb.Model):
     title = ndb.StringProperty()
     profile_key = ndb.KeyProperty(kind = Profile)
     publicationDate = ndb.DateTimeProperty()
     writtenDate = ndb.DateTimeProperty(auto_now_add=True)
-    prompt = ndb.TextProperty()
-    visualTheme = ndb.StringProperty()
+    theme = ndb.StringProperty()
     structure = ndb.StringProperty()
     views = ndb.IntegerProperty()
     published = ndb.BooleanProperty()
@@ -49,7 +48,7 @@ class MainHandler(webapp2.RequestHandler):
 
         if user:
             email = user.email().lower()
-            logout_url=users.CreateLogoutURL('/')
+            logout_url=users.create_logout_url('/')
 
             profile = Profile.query(Profile.email == email).fetch()
             if (len(profile) <1):
@@ -61,7 +60,7 @@ class MainHandler(webapp2.RequestHandler):
             template = jinja_environment.get_template("main.html")
             self.response.write(template.render(template_vals))
         else:
-            login_url = users.CreateLoginURL('/')
+            login_url = users.create_login_url('/')
             template = jinja_environment.get_template("login.html")
             template_vals = {'login_url':login_url}
             self.response.write(template.render(template_vals))
@@ -70,9 +69,14 @@ class MainHandler(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        profile = Profile.query(Profile.email == user.email()).fetch()
 
-        logout_url=users.CreateLogoutURL('/')
+        profiles = Profile.query(Profile.email == user.email().lower()).fetch()
+        profile = profiles[0]
+
+        logging.info("profpls")
+        logging.info(profile)
+
+        logout_url=users.create_logout_url('/')
 
         # publishedStories = Story.query(Story.profile_key == profile.key, Story.published == True)
         # inProgressStories = Story.query(Story.profile_key == profile.key, Story.published==False, Story.submitted == True).fetch()
@@ -84,43 +88,48 @@ class ProfileHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vals))
 
 #set profile complete!
-class SetProfileHandler(webapp2.RequestHandler):
+class MakeProfileHandler(webapp2.RequestHandler):
     def get(self):
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
-        profile = key.get()
+        user = users.get_current_user()
+        profile = Profile.query(Profile.email == user.email()).fetch()
 
-        logout_url=users.CreateLogoutURL('/')
+        logout_url=users.create_logout_url('/')
 
-        template = jinja_environment.get_template("make-profile.html")
+        template = jinja_environment.get_template("makeprofile.html")
         template_vals = {'profile':profile, 'logout_url':logout_url}
 
         self.response.write(template.render(template_vals))
 
     def post(self):
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
-        profile = key.get()
+        user = users.get_current_user()
+        profiles = Profile.query(Profile.email == user.email()).fetch()
+        profile = profiles[0]
+        logging.info("pls")
+        logging.info(profile)
 
         name = self.request.get('name')
         if name == "":
             name = profile.name
         else:
             profile.name = name
+            profile.put()
+
         bio = self.request.get('bio')
         if bio == "":
             bio = profile.bio
         else:
             profile.bio = bio
+            profile.put()
 
         age = self.request.get('age')
         if age == "":
             age = profile.age
         else:
             profile.age = age
+            profile.put()
 
         profile.put()
-        self.redirect('/profile')
+        self.redirect('/profile.html')
 
 #read page comlpete!
 class ReadHandler(webapp2.RequestHandler):
@@ -161,28 +170,26 @@ class WriteHandler(webapp2.RequestHandler):
 
         user = users.get_current_user()
         email = user.email()
-        profile = Profile.query(Profile.email == email).fetch()
+        profiles = Profile.query(Profile.email == email).fetch()
+        profile = profiles[0]
 
         template = jinja_environment.get_template("write.html")
         template_vals = {'profile':profile}
         self.response.write(template.render(template_vals))
 
     def post(self):
-        urlsafe_key = self.request.get('key')
-        key = ndb.Key(urlsafe = urlsafe_key)
-        story = key.get()
-
         user = users.get_current_user()
         email = user.email()
-        profile = Profile.query(Profile.email == email).fetch()
+        profiles = Profile.query(Profile.email == email).fetch()
+        profile = profiles[0]
 
         title = self.request.get('title')
         theme = self.request.get('theme')
-        structure = self.request.get('structure')
+        structure = "freewrite"
 
-        story = Story(title = title, profile_key = profile, theme = theme, structure = structure, views = 0, published = False, approval = False)
+        story = Story(title = title, profile_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False)
         story.put()
-        self.redirect('/profile')
+        self.redirect('/profile.html')
 
 # class FreewriteHandler(webapp2.RequestHandler):
 #     def get(self):
@@ -349,8 +356,9 @@ app = webapp2.WSGIApplication([
     ('/main.html', MainHandler),
     ('/index.html',MainHandler),
     ('/profile.html', ProfileHandler),
-    ('/make-profile', SetProfileHandler),
+    ('/makeprofile.html', MakeProfileHandler),
     ('/read.html', ReadHandler),
+    ('/read', ReadHandler),
 #    ('/readcyoa',ReadCyoaHandler),
 #    ('/readfreewrite',ReadFreewriteHandler),
     ('/write.html',WriteHandler),
