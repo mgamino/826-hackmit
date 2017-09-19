@@ -343,6 +343,12 @@ figcaption {
   box-shadow: 0 2px 7px -1px hsla(0, 0%, 66%, .73);
 }
 
+.story_art_detroit {
+
+  background-image: url('../images/11.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
+}
 .story_art_sf {
   width: 100%;
   height: 100px;
@@ -351,18 +357,21 @@ figcaption {
   background-size: cover;
 }
 
-.story_art_detroit {
-  background-image: url('../images/11.jpg');
-  background-position: 50% 0px;
-}
+
+
 
 .story_art_boston {
+  width: 100%;
+  height: 100px;
   background-image: url('../images/DD-Forest-Background-60012-Preview.jpg');
+  background-position: 0% 0%;
+  background-size: cover;
 }
 
 .story_art_dc {
-  background-image: url('../images/DC.jpeg');
-  background-position: 50% 0px;
+  background-image: url('../images/46653-O4Y0O2.jpg');
+  background-position: 50% 50%;
+  background-size: cover;
 }
 
 .story_title {
