@@ -49,8 +49,10 @@ class MainHandler(webapp2.RequestHandler):
         if user:
             email = user.email().lower()
             logout_url=users.create_logout_url('/')
+            profiles = Profile.query(Profile.email == email).fetch()
 
-            profile = Profile.query(Profile.email == email).fetch()
+            profile = profiles[0]
+
             if (len(profile) <1):
                 profile = Profile(name = "Amazing Author", bio = "I love storytelling!", email = email)
                 profile.put()
@@ -104,8 +106,6 @@ class MakeProfileHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         profiles = Profile.query(Profile.email == user.email()).fetch()
         profile = profiles[0]
-        logging.info("pls")
-        logging.info(profile)
 
         name = self.request.get('name')
         if name == "":
@@ -190,23 +190,6 @@ class WriteHandler(webapp2.RequestHandler):
         story = Story(title = title, profile_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False)
         story.put()
         self.redirect('/profile.html')
-
-# class FreewriteHandler(webapp2.RequestHandler):
-#     def get(self):
-#         #TODO: something about loading the story key?? from url maybe??
-#         template = jinja_environment.get_template("freewrite.html")
-#         self.response.write(template.render())
-#     #TODO: def post(self): save the card & story
-#
-# 	def post(self):
-# 		text = self.request.get('text')
-#         urlsafe_key = self.request.get('key')
-#         key = ndb.Key(urlsafe = urlsafe_key)
-#         story = key.get()
-#
-# 		card = Card(text = text, story_key = story_key, cardNumber = "1")
-# 		card.put()
-# 		self.redirect("/profile")
 
 # class CyoaHandler(webapp2.RequestHandler):
 #     def get(self):
