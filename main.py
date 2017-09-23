@@ -7,10 +7,9 @@ import logging
 import smtplib
 
 # TODO(asap!):
-    # - profile & makeprofile: add {{profile.email}} somewhere in html
-    # - profile & makeprofile: add avatar to HTML (dropdown OR radio button in makeprofile)
+    # - profile & editprofile: add {{profile.email}} somewhere in html
+    # - profile & editprofile: add avatar to HTML (dropdown OR radio button in makeprofile)
     # - ALL html: check to make sure logout_url is linked correctly
-    # - check getProfile() method
     # - fix webflow please im screaming
     # - editstory page - linked from story URL if it is your story & not published
     # - editstory page - prepopulated form? research!
@@ -90,7 +89,6 @@ class MainHandler(webapp2.RequestHandler):
             self.response.write(template.render(template_vals))
 
     def post(self):
-        #profile = getProfile()
         user = users.get_current_user()
         email = user.email().lower()
 
@@ -108,10 +106,7 @@ class MainHandler(webapp2.RequestHandler):
 #profile complete!
 class ProfileHandler(webapp2.RequestHandler):
     def get(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        profiles = Profile.query(Profile.email == user.email().lower()).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         logout_url=users.create_logout_url('/')
         draftStories = Story.query(Story.author_key==profile.key, Story.published==False).fetch()
@@ -125,10 +120,7 @@ class ProfileHandler(webapp2.RequestHandler):
 #set profile complete!
 class EditProfileHandler(webapp2.RequestHandler):
     def get(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        profiles = Profile.query(Profile.email == user.email().lower()).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         logout_url=users.create_logout_url('/')
 
@@ -137,10 +129,7 @@ class EditProfileHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vals))
 
     def post(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        profiles = Profile.query(Profile.email == user.email()).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         name = self.request.get('name')
         if name == "":
@@ -198,10 +187,7 @@ class ReadHandler(webapp2.RequestHandler):
 
 class FreeStyleStoryHandler(webapp2.RequestHandler):
     def get(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        profiles = Profile.query(Profile.email == user.email()).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         story_key_urlsafe = self.request.get('key')
         key = ndb.Key(urlsafe = story_key_urlsafe)
@@ -221,11 +207,7 @@ class FreeStyleStoryHandler(webapp2.RequestHandler):
 
 class WriteHandler(webapp2.RequestHandler):
     def get(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        email = user.email()
-        profiles = Profile.query(Profile.email == email).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         logout_url=users.create_logout_url('/')
 
@@ -234,11 +216,7 @@ class WriteHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vals))
 
     def post(self):
-        #profile = getProfile()
-        user = users.get_current_user()
-        email = user.email()
-        profiles = Profile.query(Profile.email == email).fetch()
-        profile = profiles[0]
+        profile = getProfile()
 
         title = self.request.get('title')
         theme = self.request.get('theme')
@@ -361,11 +339,13 @@ class ApprovalFormHandler(webapp2.RequestHandler):
         key = ndb.Key(urlsafe = urlsafe_key)
         story = key.get()
 
+        card = Card.query(Card.story_key == story.key).fetch()
+
         authors = Profile.query(Profile.key == story.author_key).fetch()
         author = authors[0]
 
         template = jinja_environment.get_template("freestyleapprovalform.html")
-        template_vals = {'story':story, 'author':author}
+        template_vals = {'story':story, 'author':author, 'card':card}
 
         self.response.write(template.render(template_vals))
 
