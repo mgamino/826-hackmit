@@ -18,6 +18,14 @@ handlers:
 - url: /js
   static_dir: js
 
+- url: /approvalform
+  script: main.app
+  login: optional
+
+- url: /approvalconfirm
+  script: main.app
+  login: optional
+
 - url: /
   script: main.app
   login: optional

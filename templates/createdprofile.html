@@ -34,19 +34,11 @@
       <div class="column w-col w-col-3 w-col-small-small-stack w-col-tiny-tiny-stack"><a class="nav_button w-clearfix w-inline-block" href="index.html"><img class="navicon" src="images/826_home.png"><div class="float_left w-hidden-small w-hidden-tiny">Home</div></a><a class="nav_button w-clearfix w-inline-block" href="read.html"><img class="navicon" src="images/826_read.png"><div class="float_left w-hidden-small w-hidden-tiny">Read</div></a><a class="nav_button w-clearfix w-inline-block" href="write.html"><img class="navicon" src="images/826_write.png"><div class="float_left w-hidden-small w-hidden-tiny">Write</div></a><a class="nav_button w-clearfix w-inline-block" href="profile.html"><img class="navicon" src="images/826_profile.png"><div class="float_left w-hidden-small w-hidden-tiny">Profile</div></a><a class="logout nav_button w-clearfix w-inline-block" href="#"><img class="navicon" src="images/826_logout.png"><div class="float_left w-hidden-small w-hidden-tiny">Logout</div></a></div>
       <div class="column-2 w-col w-col-9 w-col-small-small-stack w-col-tiny-tiny-stack">
         <div class="paper">
-          <p class="bio parent_text"><em>This story was submitted by your child/student, {{profile.name}} on {{story.submittedOn}}. </em></p>
           <div class="section-title-group">
-            <h2 class="section-heading story_header">{{story.title}}</h2>
-            <div class="story_meta">A {{story.structure}} story by {{profile.name}}</div>
+            <h2 class="section-heading story_header">Welcome!</h2>
           </div>
           <p class="bio">
-            {% if story.approval == True %}
-            Congratulations for working with such a talented author! {{profile.name}}'s story is now live at <a href= 'valenciavoyage-hackmit.appspot.com/story?key={{story.urlsafe_key}}'>This link!</a><br><br>Since authors do not get notified when their stories are approved for publishing, feel free to share the good news with {{profile.name}} yourself. Thanks for supporting their creative writing habit, as well as working with 826 National. For more information on 826, click <a href="826national.org">here</a>.
-
-            {% else %}
-            You did not approve this story for publishing. It has been moved back into {{profile.name}}'s draft folder. We at Valencia Voyage believe that this is a great opportunity for a meaningful conversation about why you did not approve the story. Is it something about the content? Are there too many spelling or grammar errors? Talk about it! We also recommend a talk about web safety, as many younger students may not realize they're sharing important information (like their school name, address, or full name) with the whole world. We believe everything is an opportunity for a learning experience.<br><br>For more information on 826, click <a href="826national.org">here</a>.
-
-            {% endif %}
+            Thank you for completing your profile! Just click the 'Profile' tab to view it.
           </p>
 
       </div>

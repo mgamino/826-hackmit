@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <!--  This site was created in Webflow. http://www.webflow.com -->
 <!--  Last Published: Sun Sep 17 2017 13:27:36 GMT+0000 (UTC)  -->
-<html data-wf-page="59bdc25953d30a000121c4c3" data-wf-site="59bd592b157a460001f831da">
+<html data-wf-page="59bdc96553d30a000121c626" data-wf-site="59bd592b157a460001f831da">
 <head>
   <meta charset="utf-8">
-  <title>Free Style Story</title>
-  <meta content="Free Style Story" property="og:title">
+  <title>Register New Profile</title>
+  <meta content="New Profile" property="og:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -31,17 +31,26 @@
   </div>
   <div class="section">
     <div class="row w-row">
-      <div class="column w-col w-col-3 w-col-small-small-stack w-col-tiny-tiny-stack"><a class="nav_button w-clearfix w-inline-block" href="index.html"><img class="navicon" src="images/826_home.png"><div class="float_left w-hidden-small w-hidden-tiny">Home</div></a><a class="nav_button w-clearfix w-inline-block" href="read.html"><img class="navicon" src="images/826_read.png"><div class="float_left w-hidden-small w-hidden-tiny">Read</div></a><a class="nav_button w-clearfix w-inline-block" href="write.html"><img class="navicon" src="images/826_write.png"><div class="float_left w-hidden-small w-hidden-tiny">Write</div></a><a class="nav_button w-clearfix w-inline-block" href="profile.html"><img class="navicon" src="images/826_profile.png"><div class="float_left w-hidden-small w-hidden-tiny">Profile</div></a><a class="logout nav_button w-clearfix w-inline-block" href="#"><img class="navicon" src="images/826_logout.png"><div class="float_left w-hidden-small w-hidden-tiny">Logout</div></a></div>
+      <div class="column w-col w-col-3 w-col-small-small-stack w-col-tiny-tiny-stack"><a class="nav_button w-clearfix w-inline-block" href="index.html"><img class="navicon" src="images/826_home.png"><div class="float_left w-hidden-small w-hidden-tiny">Home</div></a><a class="nav_button w-clearfix w-inline-block" href="read.html"><img class="navicon" src="images/826_read.png"><div class="float_left w-hidden-small w-hidden-tiny">Read</div></a><a class="nav_button w-clearfix w-inline-block" href="write.html"><img class="navicon" src="images/826_write.png"><div class="float_left w-hidden-small w-hidden-tiny">Write</div></a><a class="nav_button w-clearfix w-inline-block" href="profile.html"><img class="navicon" src="images/826_profile.png"><div class="float_left w-hidden-small w-hidden-tiny">Profile</div></a><a class="logout nav_button w-clearfix w-inline-block" href="{{logout_url}}"><img class="navicon" src="images/826_logout.png"><div class="float_left w-hidden-small w-hidden-tiny">Logout</div></a></div>
       <div class="column-2 w-col w-col-9 w-col-small-small-stack w-col-tiny-tiny-stack">
         <div class="paper">
           <div class="section-title-group">
-            <h2 class="section-heading story_header">{{story.title}}</h2>
-            <div class="story_meta">A Free Write story by {{author.name}}</div>
-            {% if profile.email == author.email and story.approval == False %}
-            <p>To edit this story, go here: TODO </p>
-            {% endif %}
+            <h2 class="section-heading story_header">Make your profile</h2>
           </div>
-          <p class="bio">{{card.text}}</p>
+
+            <form method="post">
+              <label>Name:</label><input class="w-input" maxlength="256" name="name" placeholder="Amazing Author" type="text">
+              <label>Age:</label> <input class="w-input" maxlength="3" name="age" placeholder="Immortal" type="text">
+              <label>Bio:</label><input class="w-input" name="bio" placeholder="I love storytelling!" type="text">
+              <input class="submit-button-2 w-button" data-wait="Building your profile..." type="submit" value="Create!">
+            </form>
+            <div class="w-form-done">
+              <div>Thank you! Your profile has been created!</div>
+            </div>
+            <div class="w-form-fail">
+              <div>Oops! Something went wrong while submitting the form.</div>
+            </div>
+
         </div>
       </div>
     </div>
