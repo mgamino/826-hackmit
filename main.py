@@ -10,12 +10,13 @@ import smtplib
     # - profile & editprofile: add {{profile.email}} somewhere in html
     # - profile & editprofile: add avatar to HTML (dropdown OR radio button in makeprofile)
     # - ALL html: check to make sure logout_url is linked correctly
-    # - fix webflow please im screaming
     # - editstory page - linked from story URL if it is your story & not published
     # - editstory page - prepopulated form? research!
-    # - do the python comma thing
     # - the email thing smtplib? maybe?
     # - approvalform html - need form
+    # - link to publicProfile pages
+    # - handler for publicnewprofile
+    # - design avatars!
 
 
 # TODO(whenever!):
@@ -37,6 +38,14 @@ class Profile (ndb.Model):
     accountCreated = ndb.DateTimeProperty(auto_now_add=True)
     email = ndb.StringProperty()
     age = ndb.StringProperty()
+    badges = ndb.StringProperty(repeated=True)
+
+class PublicProfile (ndb.Model):
+    name = ndb.StringProperty()
+    bio = ndb.TextProperty()
+    avatar = ndb.StringProperty()
+    email = ndb.StringProperty()
+    education = ndb.StringProperty()
 
 class Story (ndb.Model):
     title = ndb.StringProperty()
@@ -74,18 +83,18 @@ class MainHandler(webapp2.RequestHandler):
             if (len(profiles)>0):
                 logging.info("hahhahaaha what the fuck")
                 profile = profiles[0]
-                template_vals = {'profile':profile, 'logout_url':logout_url}
+                template_vals = {'profile':profile, 'logout_url':logout_url,}
                 template = jinja_environment.get_template("main.html")
                 self.response.write(template.render(template_vals))
             else:
                 template = jinja_environment.get_template("newprofile.html")
-                template_vals = {'logout_url':logout_url}
+                template_vals = {'logout_url':logout_url,}
                 self.response.write(template.render(template_vals))
 
         else:
             login_url = users.create_login_url('/')
             template = jinja_environment.get_template("login.html")
-            template_vals = {'login_url':login_url}
+            template_vals = {'login_url':login_url,}
             self.response.write(template.render(template_vals))
 
     def post(self):
@@ -97,7 +106,7 @@ class MainHandler(webapp2.RequestHandler):
         age = self.request.get('age')
         avatar = 'ok'
 
-        profile = Profile(email = email, name = name, bio = bio, age = age, avatar = avatar)
+        profile = Profile(email = email, name = name, bio = bio, age = age, avatar = avatar,)
         profile.put()
         logging.info("PROFILE HELP")
         logging.info(profile)
@@ -114,6 +123,15 @@ class ProfileHandler(webapp2.RequestHandler):
         publishedStories = Story.query(Story.author_key == profile.key, Story.approval == True).fetch()
 
         template_vals = {'profile':profile, 'logout_url':logout_url, 'draftStories':draftStories, 'publishedStories':publishedStories, 'waitingStories': waitingStories,}
+        template = jinja_environment.get_template("profile.html")
+        self.response.write(template.render(template_vals))
+
+class PublicProfileHandler(webapp2.RequestHandler):
+    def get(self):
+        publicprofile = self.request.get('publicprofile')
+        logout_url=users.create_logout_url('/')
+
+        template_vals = {'publicprofile':publicprofile, 'logout_url':logout_url,}
         template = jinja_environment.get_template("profile.html")
         self.response.write(template.render(template_vals))
 
@@ -160,7 +178,7 @@ class CreatedProfileHandler(webapp2.RequestHandler):
 
         logout_url=users.create_logout_url('/')
 
-        template_vals = {'logout_url':logout_url}
+        template_vals = {'logout_url':logout_url,}
         template = jinja_environment.get_template("createdprofile.html")
         self.response.write(template.render(template_vals))
 
@@ -171,7 +189,7 @@ class ReadHandler(webapp2.RequestHandler):
         stories = Story.query(Story.approval == True).fetch()
 
         template = jinja_environment.get_template("read.html")
-        template_vals = {'stories':stories}
+        template_vals = {'stories':stories,}
         self.response.write(template.render(template_vals))
 
 # class ReadCyoaHandler(webapp2.RequestHandler):
@@ -202,7 +220,7 @@ class FreeStyleStoryHandler(webapp2.RequestHandler):
         logout_url=users.create_logout_url('/')
 
         template = jinja_environment.get_template("freestylestory.html")
-        template_vals = {'story':story, 'profile':profile, 'author':author, 'card':card, 'logout_url':logout_url}
+        template_vals = {'story':story, 'profile':profile, 'author':author, 'card':card, 'logout_url':logout_url,}
         self.response.write(template.render(template_vals))
 
 class WriteHandler(webapp2.RequestHandler):
@@ -212,7 +230,7 @@ class WriteHandler(webapp2.RequestHandler):
         logout_url=users.create_logout_url('/')
 
         template = jinja_environment.get_template("write.html")
-        template_vals = {'profile':profile, 'logout_url':logout_url}
+        template_vals = {'profile':profile, 'logout_url':logout_url,}
         self.response.write(template.render(template_vals))
 
     def post(self):
@@ -223,7 +241,7 @@ class WriteHandler(webapp2.RequestHandler):
         text = self.request.get('text')
         structure = "freewrite"
 
-        story = Story(title = title, author_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False)
+        story = Story(title = title, author_key = profile.key, theme = theme, structure = structure, views = 0, published = False, approval = False,)
         story.put()
 
         card = Card(text = text, story_key = story.key)
@@ -345,7 +363,7 @@ class ApprovalFormHandler(webapp2.RequestHandler):
         author = authors[0]
 
         template = jinja_environment.get_template("freestyleapprovalform.html")
-        template_vals = {'story':story, 'author':author, 'card':card}
+        template_vals = {'story':story, 'author':author, 'card':card,}
 
         self.response.write(template.render(template_vals))
 
@@ -375,7 +393,7 @@ class ApprovalConfirmHandler(webapp2.RequestHandler):
         author = authors[0]
 
         template = jinja_environment.get_template("freestyleapprovalconfirm.html")
-        template_vals = {'story':story, 'author':author}
+        template_vals = {'story':story, 'author':author,}
         self.response.write(template.render(template_vals))
 
 app = webapp2.WSGIApplication([
@@ -387,6 +405,9 @@ app = webapp2.WSGIApplication([
 
     ('/profile.html', ProfileHandler),
     ('/profile', ProfileHandler),
+
+    ('/publicprofile', PublicProfileHandler),
+    ('/publicprofile.html', PublicProfileHandler),
 
     ('/editprofile.html', EditProfileHandler),
     ('/editprofile', EditProfileHandler),
